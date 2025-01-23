@@ -313,7 +313,7 @@ Returns the details of a spot specified by its id.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: spots/:id
+  * Route path: spots/:Id
   * Body: none
 
 * Successful Response
@@ -452,7 +452,7 @@ Create and return a new image for a spot specified by id.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: POST
-  * Route path: /spots/:id/images
+  * Route path: /spots/:Id/images
   * Headers:
     * Content-Type: application/json
   * Body:
