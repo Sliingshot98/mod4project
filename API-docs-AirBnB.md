@@ -497,8 +497,8 @@ Updates and returns an existing spot.
 * Require Authentication: true
 * Require proper authorization: Spot must belong to the current user
 * Request
-  * Method: ?
-  * Route path: ?
+  * Method: PUT
+  * Route path: /spots/:spotsId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -583,8 +583,8 @@ Deletes an existing spot.
 * Require Authentication: true
 * Require proper authorization: Spot must belong to the current user
 * Request
-  * Method: ?
-  * Route path: ?
+  * Method: DELETE
+  * Route path: /spots/:spotId
   * Body: none
 
 * Successful Response
@@ -619,8 +619,8 @@ Returns all the reviews written by the current user.
 
 * Require Authentication: true
 * Request
-  * Method: ?
-  * Route path: ?
+  * Method: GET
+  * Route path: /reviews/:userId
   * Body: none
 
 * Successful Response
@@ -675,8 +675,8 @@ Returns all the reviews that belong to a spot specified by id.
 
 * Require Authentication: false
 * Request
-  * Method: ?
-  * Route path: ?
+  * Method: GET
+  * Route path: /reviews/:spotId
   * Body: none
 
 * Successful Response
@@ -730,8 +730,8 @@ Create and return a new review for a spot specified by id.
 
 * Require Authentication: true
 * Request
-  * Method: ?
-  * Route path: ?
+  * Method: POST
+  * Route path: /reviews/:spotId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -808,8 +808,8 @@ Create and return a new image for a review specified by id.
 * Require Authentication: true
 * Require proper authorization: Review must belong to the current user
 * Request
-  * Method: ?
-  * Route path: ?
+  * Method: PUT
+  * Route path: /reviews/:userId/image
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -865,8 +865,8 @@ Update and return an existing review.
 * Require Authentication: true
 * Require proper authorization: Review must belong to the current user
 * Request
-  * Method: ?
-  * Route path: ?
+  * Method: PUT
+  * Route path: /reviews/:reviewId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -931,8 +931,8 @@ Delete an existing review.
 * Require Authentication: true
 * Require proper authorization: Review must belong to the current user
 * Request
-  * Method: ?
-  * Route path: ?
+  * Method: DELETE
+  * Route path: /reviews/:review
   * Body: none
 
 * Successful Response
@@ -958,7 +958,6 @@ Delete an existing review.
       "message": "Review couldn't be found"
     }
     ```
-
 ## BOOKINGS
 
 ### Get all of the Current User's Bookings
