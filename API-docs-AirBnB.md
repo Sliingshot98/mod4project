@@ -2,7 +2,7 @@
 
 ## Database Schema Design
 
-![alt text]({856B8AE9-B4C6-40D7-8C36-1A772BBBDD9D}.png)
+![alt text]({971670B8-7154-4B7F-ABD0-88057F2A1C28}.png)
 
 ## API Documentation
 
