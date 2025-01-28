@@ -2,11 +2,20 @@
 # AirBnB Clone
 <!--!!END -->
 <!--!!ADD -->
- # `Vacation Time` 
+Vacation Time
 <!--!!END_ADD -->
 
 ## Database Schema Design
 
+<!--!!START SILENT -->
+![airbnb-database-schema]
+
+[airbnb-database-schema]: https://appacademy-open-assets.s3.us-west-1.amazonaws.com/Modular-Curriculum/content/week-12/airbnb-db-schema.png
+[airbnb-db-diagram-info]: https://appacademy-open-assets.s3.us-west-1.amazonaws.com/Modular-Curriculum/content/week-12/airbnb-db-diagram-info.txt
+<!--!!END -->
+<!--!!ADD -->
+<!-- `<insert database schema design here>` -->
+<!--!!END_ADD -->
 <!--!!START SILENT -->
 ![airbnb-database-schema]
 
@@ -63,7 +72,14 @@ Returns the information about the current user that is logged in.
 * Require Authentication: false
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: GET
+  * URL: /api/session
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/session
   <!--!!END -->
   <!--!!ADD -->
@@ -110,7 +126,14 @@ information.
 * Require Authentication: false
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: POST
+  * URL: /api/session
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/session
   <!--!!END -->
   <!--!!ADD -->
@@ -182,7 +205,14 @@ user's information.
 * Require Authentication: false
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: POST
+  * URL: /api/users
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/users
   <!--!!END -->
   <!--!!ADD -->
@@ -205,6 +235,7 @@ user's information.
 
 * Successful Response
   * Status Code: 200
+  * Status Code: 200
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -222,6 +253,22 @@ user's information.
     ```
 
 * Error response: User already exists with the specified email
+* Error response: User already exists with the specified email
+  * Status Code: 500
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "User already exists",
+      "errors": {
+        "email": "User with that email already exists"
+      }
+    }
+    ```
+
+* Error response: User already exists with the specified username
   * Status Code: 500
   * Headers:
     * Content-Type: application/json
@@ -278,7 +325,14 @@ Returns all the spots.
 * Require Authentication: false
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: GET
+  * URL: /api/spots
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/spots
   <!--!!END -->
   <!--!!ADD -->
@@ -324,7 +378,14 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: GET
+  * URL: /api/spots/current
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/spots/current
   <!--!!END -->
   <!--!!ADD -->
@@ -370,7 +431,14 @@ Returns the details of a spot specified by its id.
 * Require Authentication: false
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: GET
+  * URL: /api/spots/:spotId
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/spots/:spotId
   <!--!!END -->
   <!--!!ADD -->
@@ -441,7 +509,14 @@ Creates and returns a new spot.
 * Require Authentication: true
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: POST
+  * URL: /api/spots
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/spots
   <!--!!END -->
   <!--!!ADD -->
@@ -521,7 +596,14 @@ Create and return a new image for a spot specified by id.
 * Require proper authorization: Spot must belong to the current user
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: POST
+  * URL: /api/spots/:spotId/images
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/spots/:spotId/images
   <!--!!END -->
   <!--!!ADD -->
@@ -540,6 +622,7 @@ Create and return a new image for a spot specified by id.
     ```
 
 * Successful Response
+  * Status Code: 200
   * Status Code: 200
   * Headers:
     * Content-Type: application/json
@@ -573,7 +656,14 @@ Updates and returns an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: PUT
+  * URL: /api/spots/:spotId
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/spots/:spotId
   <!--!!END -->
   <!--!!ADD -->
@@ -665,7 +755,14 @@ Deletes an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: DELETE
+  * URL: /api/spots/:spotId
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/spots/:spotId
   <!--!!END -->
   <!--!!ADD -->
@@ -707,7 +804,14 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: GET
+  * URL: /api/reviews/current
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/reviews/current
   <!--!!END -->
   <!--!!ADD -->
@@ -769,7 +873,14 @@ Returns all the reviews that belong to a spot specified by id.
 * Require Authentication: false
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: GET
+  * URL: /api/spots/:spotId/reviews
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/spots/:spotId/reviews
   <!--!!END -->
   <!--!!ADD -->
@@ -830,7 +941,14 @@ Create and return a new review for a spot specified by id.
 * Require Authentication: true
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: POST
+  * URL: /api/spots/:spotId/reviews
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/spots/:spotId/reviews
   <!--!!END -->
   <!--!!ADD -->
@@ -921,6 +1039,14 @@ Create and return a new image for a review specified by id.
   <!-- * Method: ? -->
   <!-- * URL: ? -->
   <!--!!END_ADD -->
+  <!--!!START SILENT -->
+  * Method: POST
+  * URL: /api/reviews/:reviewId/images
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -932,6 +1058,7 @@ Create and return a new image for a review specified by id.
     ```
 
 * Successful Response
+  * Status Code: 200
   * Status Code: 200
   * Headers:
     * Content-Type: application/json
@@ -977,7 +1104,14 @@ Update and return an existing review.
 * Require proper authorization: Review must belong to the current user
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: PUT
+  * URL: /api/reviews/:reviewId
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/reviews/:reviewId
   <!--!!END -->
   <!--!!ADD -->
@@ -1049,7 +1183,14 @@ Delete an existing review.
 * Require proper authorization: Review must belong to the current user
 * Request
   <!--!!START SILENT -->
+  <!--!!START SILENT -->
   * Method: DELETE
+  * URL: /api/reviews/:reviewId
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * URL: /api/reviews/:reviewId
   <!--!!END -->
   <!--!!ADD -->
@@ -1082,6 +1223,7 @@ Delete an existing review.
     }
     ```
 
+
 ## BOOKINGS
 
 ### Get all of the Current User's Bookings
@@ -1090,6 +1232,14 @@ Return all the bookings that the current user has made.
 
 * Require Authentication: true
 * Request
+  <!--!!START SILENT -->
+  * Method: GET
+  * URL: /api/bookings/current
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   <!--!!START SILENT -->
   * Method: GET
   * URL: /api/bookings/current
@@ -1141,6 +1291,14 @@ Return all the bookings for a spot specified by id.
 
 * Require Authentication: true
 * Request
+  <!--!!START SILENT -->
+  * Method: GET
+  * URL: /api/spots/:spotId/bookings
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   <!--!!START SILENT -->
   * Method: GET
   * URL: /api/spots/:spotId/bookings
@@ -1223,6 +1381,14 @@ Create and return a new booking from a spot specified by id.
   <!-- * Method: ? -->
   <!-- * URL: ? -->
   <!--!!END_ADD -->
+  <!--!!START SILENT -->
+  * Method: POST
+  * URL: /api/spots/:spotId/bookings
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1235,6 +1401,7 @@ Create and return a new booking from a spot specified by id.
     ```
 
 * Successful Response
+  * Status Code: 200
   * Status Code: 200
   * Headers:
     * Content-Type: application/json
@@ -1303,6 +1470,14 @@ Update and return an existing booking.
 * Require Authentication: true
 * Require proper authorization: Booking must belong to the current user
 * Request
+  <!--!!START SILENT -->
+  * Method: PUT
+  * URL: /api/bookings/:bookingId
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   <!--!!START SILENT -->
   * Method: PUT
   * URL: /api/bookings/:bookingId
@@ -1412,6 +1587,14 @@ Delete an existing booking.
   <!-- * Method: ? -->
   <!-- * URL: ? -->
   <!--!!END_ADD -->
+  <!--!!START SILENT -->
+  * Method: DELETE
+  * URL: /api/bookings/:bookingId
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * Body: none
 
 * Successful Response
@@ -1467,6 +1650,14 @@ Delete an existing image for a Spot.
   <!-- * Method: ? -->
   <!-- * URL: ? -->
   <!--!!END_ADD -->
+  <!--!!START SILENT -->
+  * Method: DELETE
+  * URL: /api/spot-images/:imageId
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * Body: none
 
 * Successful Response
@@ -1500,6 +1691,14 @@ Delete an existing image for a Review.
 * Require Authentication: true
 * Require proper authorization: Review must belong to the current user
 * Request
+  <!--!!START SILENT -->
+  * Method: DELETE
+  * URL: /api/review-images/:imageId
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   <!--!!START SILENT -->
   * Method: DELETE
   * URL: /api/review-images/:imageId
@@ -1548,7 +1747,16 @@ Return spots filtered by query parameters.
   <!-- * Method: ? -->
   <!-- * URL: ? -->
   <!--!!END_ADD -->
+  <!--!!START SILENT -->
+  * Method: GET
+  * URL: /api/spots
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
   * Query Parameters
+    * page: integer, minimum: 1, maximum: 10, default: 1
     * page: integer, minimum: 1, maximum: 10, default: 1
     * size: integer, minimum: 1, maximum: 20, default: 20
     * minLat: decimal, optional
@@ -1588,6 +1796,7 @@ Return spots filtered by query parameters.
       ],
       "page": 2,
       "size": 25
+      "size": 25
     }
     ```
 
@@ -1602,6 +1811,7 @@ Return spots filtered by query parameters.
       "message": "Bad Request", // (or "Validation error" if generated by Sequelize),
       "errors": {
         "page": "Page must be greater than or equal to 1",
+        "size": "Size must be greater than or equal to 1",
         "size": "Size must be greater than or equal to 1",
         "maxLat": "Maximum latitude is invalid",
         "minLat": "Minimum latitude is invalid",
