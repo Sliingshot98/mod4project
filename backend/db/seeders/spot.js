@@ -11,7 +11,18 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up (queryInterface, Sequelize) {
     await Spot.bulkCreate([
-      //COME BACK TO THIS
+      {
+        ownerId: 1,
+        address: "123 address lane",
+        city: "New Orleans",
+        state: "Louisiana",
+        country: "Republic of the Congo",
+        lat: 3.14152965,
+        lng: 3.14152965,
+        name: "Bonkwikwi",
+        description: "This is a description with bda selping",
+        price: 99999.99,
+      }
     ], { validate: true });
   },
 

@@ -48,12 +48,12 @@ module.exports = {
         unique: true
       },
       name: {
-        type: Sequelize.Decimal[9,6],
+        type: Sequelize.VARCHAR[22],
         allowNull: false,
         unique: true
       },
       description: {
-        type: Sequelize.VARCHAR["204"],
+        type: Sequelize.VARCHAR[204],
         allowNull: false,
       },
       price: {
