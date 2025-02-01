@@ -6,8 +6,18 @@ module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     static associate(models) {
       // define association here
-        
-
+        Spot.belongsToMany(User,{
+          foreignKey:"ownerid"
+        });
+         Spot.belongsToMany(Review, {
+         foreignKey: "spotid"
+         });
+        Spot.belongsToMany(Booking, {
+           foreignKey: "spotid"
+         });
+         Spot.belongsToMany(Spotimage, {
+           foreignKey: "spotid"
+         });
     }
   }
 
@@ -73,8 +83,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "spots",
-    }
+      modelName: "Spot",
+      tableName: "spots",
+   }
   );
   return Spot;
 };
