@@ -6,24 +6,24 @@ module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     static associate(models) {
       // define association here
-        Spot.belongsToMany(User,{
+        Spot.belongsToMany(models.User,{
           foreignKey:"ownerid"
         });
-         Spot.belongsToMany(Review, {
-         foreignKey: "spotid"
-         });
-        Spot.belongsToMany(Booking, {
-           foreignKey: "spotid"
-         });
-         Spot.belongsToMany(Spotimage, {
-           foreignKey: "spotid"
-         });
+        //  Spot.belongsToMany(Review, {
+        //  foreignKey: "spotid"
+        //  });
+        //  Spot.belongsToMany(Booking, {
+        //    foreignKey: "spotid"
+        //  });
+        //  Spot.belongsToMany(Spotimage, {
+        //    foreignKey: "spotid"
+        //  });
     }
-  }
+  } ///delete on cascade
 
-  spots.init(
+  Spot.init(
     {
-      ownerid: {
+      ownerId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         unique: true,
@@ -59,8 +59,9 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       name: {
-        type: DataTypes.VARCHAR[30],
+        type: DataTypes.Decimal[9,6],
         allowNull: false,
+        unique: true
       },
       description: {
         type: DataTypes.VARCHAR["204"],
