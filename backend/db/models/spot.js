@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
         Spot.belongsToMany(models.User,{
-          foreignKey:"ownerid"
+          foreignKey:"ownerid",
+          onDelete: "CASCADE"
         });
         //  Spot.belongsToMany(Review, {
         //  foreignKey: "spotid"
@@ -19,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         //    foreignKey: "spotid"
         //  });
     }
-  } ///delete on cascade
+  } //delete on cascade
 
   Spot.init(
     {
