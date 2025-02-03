@@ -2,12 +2,12 @@ const express = require('express');
 require('express-async-errors');
 const morgan = require('morgan');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const csurf = require('csurf');
 const helmet = require('helmet');
-const cookieParser = require('cookie-parser');
 const { ValidationError } = require('sequelize');
 
-const { environment } = require('./config');
+const { environment, port } = require('./config');
 const isProduction = environment === 'production'
 const app = express();
 app.use(morgan('dev'));
@@ -27,6 +27,7 @@ if (!isProduction) {
     })
   );
   
+  app.use(csurf({ cookie: true }));
   // Set the _csrf token and create req.csrfToken method
   app.use(
     csurf({
@@ -39,6 +40,7 @@ if (!isProduction) {
   );
 
 const routes = require('./routes');
+const { PROTOCOL } = require('sqlite3');
 
 
 //middleware to be used here
@@ -83,7 +85,7 @@ app.use((err, _req, res, _next) => {
   });
 });
 
-
+app.listen(port, () => console.log("Server is listening to you sir or madame, on port", port) );
 
 
 module.exports = app;
