@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
         Spot.belongsToMany(models.User,{
-          foreignKey:"ownerid",
+          through:"User Spots",
+          foreignKey:"ownerId",
           onDelete: "CASCADE"
         });
         //  Spot.belongsToMany(Review, {
@@ -30,55 +31,55 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       address: {
-        type: DataTypes.VARCHAR[50],
+        type: DataTypes.STRING(50),
         allowNull: false,
         unique: true,
       },
       city: {
-        type: DataTypes.VARCHAR[50],
+        type: DataTypes.STRING(50),
         allowNull: false,
         unique: false,
       },
       state: {
-        type: DataTypes.VARCHAR[14],
+        type: DataTypes.STRING(14),
         allowNull: false,
         unique: true,
       },
       country: {
-        type: DataTypes.VARCHAR[50],
+        type: DataTypes.STRING(50),
         allowNull: false,
         unique: true,
       },
       lat: {
-        type: DataTypes.DECIMAL[9, 6],
+        type: DataTypes.DECIMAL(9, 6),
         allowNull: false,
         unique: true,
       },
       lng: {
-        type: DataTypes.DECIMAL[9, 6],
+        type: DataTypes.DECIMAL(9, 6),
         allowNull: false,
         unique: true,
       },
       name: {
-        type: DataTypes.Decimal[9,6],
+        type: DataTypes.STRING(9,6),
         allowNull: false,
         unique: true
       },
       description: {
-        type: DataTypes.VARCHAR["204"],
+        type: DataTypes.STRING(204),
         allowNull: false,
       },
       price: {
-        type: DataTypes.DECIMAL[7,2], 
+        type: DataTypes.DECIMAL(7,2), 
         allowNull:false,
       },
       createdAt: {
-        type: DataTypes.TIMESTAMP,
+        type: DataTypes.DATE,
         allowNull:false,
         defaultValue: sequelize.literal("current_timestamp"),
       },
       updatedAt: {
-        type: DataTypes.TIMESTAMP,
+        type: DataTypes.DATE,
         allowNull:false,
         defaultValue: sequelize.literal("current_timestamp"),
       },
