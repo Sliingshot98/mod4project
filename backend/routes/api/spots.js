@@ -91,8 +91,65 @@ router.delete('/:spotId', requireAuth, async (req, res) => {
     return res.status(400).json({ message: "Bad request." });
   }
 });
-
-//create a spot
+// Edit a Spot
+router.put('/:spotId', requireAuth, async (req, res) => {
+    const { spotId } = req.params;
+    const { user } = req;
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
+  
+    try {
+      const spot = await Spot.findByPk(spotId);
+      if (!spot) {
+        return res.status(404).json({ message: "Spot couldn't be found" });
+      }
+  
+      // Check if the current user is the owner of the spot
+      if (spot.ownerId !== user.id) {
+        return res.status(403).json({ message: 'Forbidden' });
+      }
+  
+      // Update the spot
+      spot.address = address || spot.address;
+      spot.city = city || spot.city;
+      spot.state = state || spot.state;
+      spot.country = country || spot.country;
+      spot.lat = lat || spot.lat;
+      spot.lng = lng || spot.lng;
+      spot.name = name || spot.name;
+      spot.description = description || spot.description;
+      spot.price = price || spot.price;
+  
+      await spot.save();
+      return res.json(spot);
+    } catch (err) {
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+  
+  // Delete a Spot
+  router.delete('/:spotId', requireAuth, async (req, res) => {
+    const { spotId } = req.params;
+    const { user } = req;
+  
+    try {
+      const spot = await Spot.findByPk(spotId);
+      if (!spot) {
+        return res.status(404).json({ message: "Spot couldn't be found" });
+      }
+  
+      // Check if the current user is the owner of the spot
+      if (spot.ownerId !== user.id) {
+        return res.status(403).json({ message: 'Forbidden' });
+      }
+  
+      await spot.destroy();
+      return res.json({ message: 'Successfully deleted' });
+    } catch (err) {
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+  
+ 
 
 module.exports = router;
 
