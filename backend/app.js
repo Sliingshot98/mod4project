@@ -7,9 +7,12 @@ const csurf = require('csurf');
 const helmet = require('helmet');
 const { ValidationError } = require('sequelize');
 
+const routes = require('./routes');
+
 const { environment, port } = require('./config');
 const isProduction = environment === 'production'
 const app = express();
+
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
@@ -27,10 +30,10 @@ if (!isProduction) {
     })
   );
   
-  app.use(csurf({ cookie: true }));
-  // Set the _csrf token and create req.csrfToken method
+
+  // Set the _csurf token and create req.csrfToken method
   app.use(
-    csurf({
+   csurf({
       cookie: {
         secure: isProduction,
         sameSite: isProduction && "Lax",
@@ -39,8 +42,7 @@ if (!isProduction) {
     })
   );
 
-const routes = require('./routes');
-const { PROTOCOL } = require('sqlite3');
+
 
 
 //middleware to be used here
