@@ -15,49 +15,49 @@ module.exports = {
       ownerId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true
+
       },
       address: {
-        type: Sequelize.VARCHAR[50],
+        type: Sequelize.STRING,
         allowNull: false,
         unique: true
       },
       city: {
-        type: Sequelize.VARCHAR[50],
+        type: Sequelize.STRING,
         allowNull: false,
-        unique: false
+
       },
       state: {
-        type: Sequelize.VARCHAR[14],
+        type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
+
       },
       country: {
-        type: Sequelize.VARCHAR[50],
+        type: Sequelize.STRING,
         allowNull: false,
-        unique: false
+
       },
       lat: {
-        type: Sequelize.Decimal[9,6],
+        type: Sequelize.DECIMAL,
         allowNull: false,
-        unique: true
+
       },
       lng: {
-        type: Sequelize.Decimal[9,6],
+        type: Sequelize.DECIMAL,
         allowNull: false,
-        unique: true
+
       },
       name: {
-        type: Sequelize.VARCHAR[22],
+        type: Sequelize.STRING,
         allowNull: false,
         unique: true
       },
       description: {
-        type: Sequelize.VARCHAR[204],
+        type: Sequelize.STRING,
         allowNull: false,
       },
       price: {
-        type: Sequelize.DECIMAL[7,2], 
+        type: Sequelize.DECIMAL, 
         allowNull:false
       },
       createdAt: {
