@@ -22,14 +22,14 @@ if (!isProduction) {
     // enable cors only in development
     app.use(cors());
   }
-  
+
   // helmet helps set a variety of headers to better secure your app
   app.use(
     helmet.crossOriginResourcePolicy({
       policy: "cross-origin"
     })
   );
-  
+
 
   // Set the _csurf token and create req.csrfToken method
   app.use(
@@ -49,7 +49,7 @@ if (!isProduction) {
 
 
 
-app.use(routes); 
+app.use(routes);
 
 
 // Catch unhandled requests and forward to error handler.
@@ -87,7 +87,7 @@ app.use((err, _req, res, _next) => {
   });
 });
 
-app.listen(port, () => console.log("Server is listening to you sir or madame, on port", port) );
+// app.listen(port, () => console.log("Server is listening to you sir or madame, on port", port) );
 
 
 module.exports = app;
