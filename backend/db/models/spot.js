@@ -6,10 +6,9 @@ module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     static associate(models) {
       // define association here
-        Spot.belongsToMany(models.User,{
-          through:"User Spots",
+        Spot.belongsTo(models.User,{
           foreignKey:"ownerId",
-          onDelete: "CASCADE"
+          
         });
         //  Spot.belongsToMany(Review, {
         //  foreignKey: "spotid"
@@ -28,66 +27,60 @@ module.exports = (sequelize, DataTypes) => {
       ownerId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
+        references:{
+          model: "Users",
+        },
+        onDelete: "CASCADE"
       },
       address: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
       city: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING,
         allowNull: false,
         unique: false,
       },
       state: {
-        type: DataTypes.STRING(14),
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
       country: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
       lat: {
-        type: DataTypes.DECIMAL(9, 6),
+        type: DataTypes.DECIMAL,
         allowNull: false,
         unique: true,
       },
       lng: {
-        type: DataTypes.DECIMAL(9, 6),
+        type: DataTypes.DECIMAL,
         allowNull: false,
         unique: true,
       },
       name: {
-        type: DataTypes.STRING(9,6),
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true
       },
       description: {
-        type: DataTypes.STRING(204),
+        type: DataTypes.STRING,
         allowNull: false,
       },
       price: {
-        type: DataTypes.DECIMAL(7,2), 
+        type: DataTypes.DECIMAL, 
         allowNull:false,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull:false,
-        defaultValue: sequelize.literal("current_timestamp"),
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull:false,
-        defaultValue: sequelize.literal("current_timestamp"),
-      },
+      
     },
     {
       sequelize,
       modelName: "Spot",
-      tableName: "spots",
+      
    }
   );
   return Spot;

@@ -7,18 +7,53 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
 
-// Get all spots
-router.get('/', async (req, res) => {
+
+ //Add Query Filters to get all Spots + GET ALL SPOTS
+ router.get('/', async (req, res, next) => {
+  console.log(req.path)
+  const {
+    page = 1, 
+    size = 10, 
+    minLat,
+    maxLat,
+    minLng,
+    maxLng,
+    minPrice,
+    maxPrice,
+  } = req.query;
+
+  const where = {};
+  // Add filters based on query parameters
+  if (minLat) where.lat = { [Op.gte]: parseFloat(minLat) };
+  if (maxLat) where.lat = { ...where.lat, [Op.lte]: parseFloat(maxLat) };
+  if (minLng) where.lng = { [Op.gte]: parseFloat(minLng) };
+  if (maxLng) where.lng = { ...where.lng, [Op.lte]: parseFloat(maxLng) };
+  if (minPrice) where.price = { [Op.gte]: parseFloat(minPrice) };
+  if (maxPrice) where.price = { ...where.price, [Op.lte]: parseFloat(maxPrice) };
+
   try {
-    const spots = await Spot.findAll();
-    return res.json({ Spots: spots });
+    const spots = await Spot.findAll({
+      where,
+      limit: size,
+      offset: (page - 1) * size,
+    });
+console.log(spots);
+    // Get total count of spots for pagination
+    const totalSpots = await Spot.count({ where });
+
+    return res.json({
+      Spots: spots,
+      page: parseInt(page),
+      size: parseInt(size),
+      totalSpots,
+    });
   } catch (err) {
-    return res.status(400).json({ message: "Bad request." });
+    console.error(err);
+    next(err); 
   }
 });
-
 // Get all Spots owned by the Current User
-router.get('/current', requireAuth, async (req, res) => {
+router.get('/current', requireAuth, async (req, res, next) => {
   const { user } = req;
   try {
     const spots = await Spot.findAll({
@@ -26,12 +61,12 @@ router.get('/current', requireAuth, async (req, res) => {
     });
     return res.json({ Spots: spots });
   } catch (err) {
-    return res.status(400).json({ message: "Bad request." });
+    next(err)
   }
 });
 
 // Get details of a Spot from an id
-router.get('/:spotId', async (req, res) => {
+router.get('/:spotId', async (req, res, next) => {
   const { spotId } = req.params;
   try {
     const spot = await Spot.findByPk(spotId);
@@ -40,18 +75,27 @@ router.get('/:spotId', async (req, res) => {
     }
     return res.json(spot);
   } catch (err) {
-    return res.status(400).json({ message: "Bad request." });
+   next(err);
   }
 });
 
 // Create a Spot
-router.post('/', requireAuth, async (req, res) => {
-  const { user } = req;
-  const { address, city, state, country, lat, lng, name, description, price } = req.body;
+router.post('/', requireAuth, async (req, res, next) => {
+
+  const { address, 
+    city, 
+    state, 
+    country, 
+    lat, 
+    lng,
+    name, 
+    description, 
+    price
+   } = req.body;
 
   try {
     const newSpot = await Spot.create({
-      ownerId: user.id,
+      ownerId: req.user.id,
       address,
       city,
       state,
@@ -64,35 +108,13 @@ router.post('/', requireAuth, async (req, res) => {
     });
     return res.status(201).json(newSpot);
   } catch (err) {
-    return res.status(400).json({ message: "Bad request." });
+    next(err)
   }
 });
 
 
-// Delete a Spot
-router.delete('/:spotId', requireAuth, async (req, res) => {
-  const { spotId } = req.params;
-  const { user } = req;
-
-  try {
-    const spot = await Spot.findByPk(spotId);
-    if (!spot) {
-      return res.status(400).json({ message: "Bad request." });
-    }
-
-    // Check if the current user is the owner of the spot
-    if (spot.ownerId !== user.id) {
-      return res.status(400).json({ message: "Bad request." });
-    }
-
-    await spot.delete();
-    return res.json({ message: 'Successfully deleted' });
-  } catch (err) {
-    return res.status(400).json({ message: "Bad request." });
-  }
-});
 // Edit a Spot
-router.put('/:spotId', requireAuth, async (req, res) => {
+router.put('/:spotId', requireAuth, async (req, res,next) => {
     const { spotId } = req.params;
     const { user } = req;
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
@@ -122,8 +144,7 @@ router.put('/:spotId', requireAuth, async (req, res) => {
       await spot.save();
       return res.json(spot);
     } catch (err) {
-      return res.status(500).json({ message: 'Internal Server Error' });
-    }
+     next(err)}
   });
   
   // Delete a Spot
@@ -145,11 +166,9 @@ router.put('/:spotId', requireAuth, async (req, res) => {
       await spot.destroy();
       return res.json({ message: 'Successfully deleted' });
     } catch (err) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+      next(err)
     }
   });
-  
- 
 
 module.exports = router;
 
