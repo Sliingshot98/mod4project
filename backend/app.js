@@ -7,9 +7,12 @@ const csurf = require('csurf');
 const helmet = require('helmet');
 const { ValidationError } = require('sequelize');
 
+const routes = require('./routes');
+
 const { environment, port } = require('./config');
 const isProduction = environment === 'production'
 const app = express();
+
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
@@ -19,18 +22,18 @@ if (!isProduction) {
     // enable cors only in development
     app.use(cors());
   }
-  
+
   // helmet helps set a variety of headers to better secure your app
   app.use(
     helmet.crossOriginResourcePolicy({
       policy: "cross-origin"
     })
   );
-  
-  app.use(csurf({ cookie: true }));
-  // Set the _csrf token and create req.csrfToken method
+
+
+  // Set the _csurf token and create req.csrfToken method
   app.use(
-    csurf({
+   csurf({
       cookie: {
         secure: isProduction,
         sameSite: isProduction && "Lax",
@@ -39,15 +42,14 @@ if (!isProduction) {
     })
   );
 
-const routes = require('./routes');
-const { PROTOCOL } = require('sqlite3');
+
 
 
 //middleware to be used here
 
 
 
-app.use(routes); 
+app.use(routes);
 
 
 // Catch unhandled requests and forward to error handler.
@@ -84,6 +86,10 @@ app.use((err, _req, res, _next) => {
     stack: isProduction ? null : err.stack
   });
 });
+
+
+
+// app.listen(port, () => console.log("Server is listening to you sir or madame, on port", port) );
 
 
 
