@@ -6,7 +6,7 @@ const usersRouter = require('./users.js');
 
 const spotsRouter = require('./spots.js');
 
-const spotsRouter = require('./spots.js')
+
 
 const { User } = require ('../../db/models');
 
