@@ -16,6 +16,12 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
 
+        references: {
+          model: "Users"
+        },
+        onDelete: "CASCADE",
+
+
       },
       address: {
         type: Sequelize.STRING,
@@ -25,6 +31,7 @@ module.exports = {
       city: {
         type: Sequelize.STRING,
         allowNull: false,
+
 
       },
       state: {
@@ -61,20 +68,19 @@ module.exports = {
         allowNull:false
       },
       createdAt: {
-        allowNull: false,
+
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
       }
     }, options);
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = "Spots";
+    options.tableName = 'Spots';
     return queryInterface.dropTable(options);
   }
 };
