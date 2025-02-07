@@ -56,8 +56,8 @@ router.post(
   
       await setTokenCookie(res, safeUser);
   
-      return res.json({
-        user: safeUser
+       res.json({
+        'user': safeUser
       });
     }
   );
@@ -66,7 +66,7 @@ router.delete(
     '/',
     (_req, res) => {
       res.clearCookie('token');
-      return res.json({ message: 'success' });
+      res.json({ message: 'success' });
     }
   );
 // Restore session user
@@ -75,17 +75,18 @@ router.get(
     (req, res) => {
       const { user } = req;
       if (user) {
+        console.log(user)
         const safeUser = {
           id: user.id,
-          firstname: user.firstname,
-          lastname: user.lastname,
+          firstName: user.firstName,
+          lastName: user.lastName,
           email: user.email,
           username: user.username,
         };
-        return res.json({
+         res.json({
           user: safeUser
         });
-      } else return res.json({ user: null });
+      } else res.json({ user: null });
     }
   );
 
