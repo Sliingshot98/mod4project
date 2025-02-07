@@ -8,6 +8,13 @@ const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require("sequelize")
 const router = express.Router();
 
+//// MIDDLE WARE
+
+const validateSpot = 
+
+
+
+
 
  //Add Query Filters to get all Spots + GET ALL SPOTS
  router.get('/', async (req, res, next) => {

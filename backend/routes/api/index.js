@@ -3,8 +3,10 @@ const router = require('express').Router();
 const { setTokenCookie } = require('../../utils/auth.js');
 const sessionRouter = require('./sessions.js');
 const usersRouter = require('./users.js');
-
+const bookingsRouter = require('./bookings.js');
 const spotsRouter = require('./spots.js');
+const reviewsRouter = require('./reviews.js');
+
 
 
 
@@ -21,7 +23,8 @@ router.use('/sessions', sessionRouter);
 router.use('/spots',spotsRouter);
 router.use('/users', usersRouter);
 router.use('/spots', spotsRouter);
-
+router.use('/bookings', bookingsRouter);
+router.use('/reviews', reviewsRouter);
 
 router.post('/test', (req, res) => {
   res.json({ requestBody: req.body });
