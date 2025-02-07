@@ -8,12 +8,13 @@ const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require("sequelize")
 const router = express.Router();
 
-//// MIDDLE WARE
-
-const validateSpot = 
+//middle ware for create a spot
 
 
-
+//middle ware for edit a spot
+const bodyValidation = async ( req, res, next) => {
+  
+}
 
 
  //Add Query Filters to get all Spots + GET ALL SPOTS
@@ -73,10 +74,9 @@ router.get('/:spotId', async (req, res, next) => {
   const { spotId } = req.params;
   try {
     const spot = await Spot.findByPk(spotId);
-    if (!spot) {
-       res.status(400).json({ 'message': "Bad request." });
-    }
-     res.json({'Spot': spot});
+    if(!spot){
+      res.status(404).json({ 'message': "Spot couldn't be found" });
+     res.json({'Spot': spot})}
   } catch (err) {
    next(err);
   }
