@@ -10,36 +10,37 @@ const router = express.Router();
 
 
 //Get all reviews of the current user
-router.get('./current', requireAuth,
+router.get('/current', requireAuth,
 async (req, res) => {
     const { user } = req;
     try {
-        const review = await Review.findAll();
-        ({
-            where: { ownerId: user.id }
-        });
+        const reviews = await Review.findAll({where: { ownerId: user.id }});
         return res.json({ Reviews: reviews });
     } catch (err) {
-        return res.status(400).json({ message: "Bad Request" });
+        return res.status(404).json({ message: "Spot couldn't be found" });
     }
 });
 
+
+
 //Get all reviews by a spots id
-router.get(/:spotId/reviews, async(req, res) => {
+router.get('/:spotId/reviews', async (req, res) => {
     const { spotId } = req.params;
     
  try {
    const spot = await Spot.findByPk(spotId);
    if(!spot){
-    return res.status(404).json({message: "SPot not found"});
+    return res.status(404).json({message: "Spot couldn't be found"});
    }
    const reviews= await Review.findAll({where: {spotId: spotId}});
-   if(review.length === 0){
+   if(reviews.length === 0){
     return res.status(404).json({message: 'No reviews found for this spot'})
    }
    return res.json({reviews});
 } catch (err){
-    return res.status(400).json({message: 'Bad Request'})
+    return res.status(400).json({
+        "message": "Bad Request", 
+      })
 }
 });
 
@@ -55,7 +56,7 @@ router.post('/', requireAuth, async (req, res) => {
     try {
         const spot = await Spot.findByPk(spotId);
         if(!spot){
-            return res.status(404).json({message: 'That spot does not exist'})
+            return res.status(404).json({message: "Spot couldn't be found"})
         }
         const newReview = await Review.create({
             ownerId: userId,
