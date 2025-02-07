@@ -7,7 +7,10 @@ const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
 
 // Middleware to validate booking input
+<<<<<<< HEAD
 
+=======
+>>>>>>> staging
 const validateBooking = [
   check('startDate')
     .exists({ checkFalsy: true })
@@ -25,7 +28,10 @@ const validateBooking = [
 ];
 
 // Get all bookings for the current user
+<<<<<<< HEAD
 
+=======
+>>>>>>> staging
 router.get('/current', requireAuth, async (req, res) => {
   const { id } = req.user;
   const bookings = await Booking.findAll({
@@ -36,7 +42,10 @@ router.get('/current', requireAuth, async (req, res) => {
 });
 
 // Create a new booking
+<<<<<<< HEAD
 
+=======
+>>>>>>> staging
 router.post('/:spotId', requireAuth, validateBooking, async (req, res) => {
   const { id } = req.user;
   const { spotId } = req.params;
@@ -58,7 +67,10 @@ router.post('/:spotId', requireAuth, validateBooking, async (req, res) => {
 });
 
 // Update a booking
+<<<<<<< HEAD
 
+=======
+>>>>>>> staging
 router.put('/:bookingId', requireAuth, validateBooking, async (req, res) => {
   const { id } = req.user;
   const { bookingId } = req.params;
@@ -66,7 +78,11 @@ router.put('/:bookingId', requireAuth, validateBooking, async (req, res) => {
 
   const booking = await Booking.findByPk(bookingId);
   if (!booking) {
+<<<<<<< HEAD
     return res.status(404).json({ message: "The Booking couldn't be found" });
+=======
+    return res.status(404).json({ message: "Booking couldn't be found" });
+>>>>>>> staging
   }
 
   if (booking.userId !== id) {
@@ -81,7 +97,10 @@ router.put('/:bookingId', requireAuth, validateBooking, async (req, res) => {
 });
 
 // Delete a booking
+<<<<<<< HEAD
 
+=======
+>>>>>>> staging
 router.delete('/:bookingId', requireAuth, async (req, res) => {
   const { id } = req.user;
   const { bookingId } = req.params;
