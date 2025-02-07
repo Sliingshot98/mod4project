@@ -1,0 +1,12 @@
+{
+  "name": "definitely-not-airbnb",
+  "version": "1.0.0",
+  "description": "<!--!!START SILENT --> # AirBnB Clone <!--!!END --> <!--!!ADD --> Vacation Time <!--!!END_ADD -->",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
