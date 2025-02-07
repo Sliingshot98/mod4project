@@ -8,17 +8,16 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
         Spot.belongsTo(models.User,{
           foreignKey:"ownerId",
-          
         });
-        //  Spot.belongsToMany(Review, {
-        //  foreignKey: "spotid"
-        //  });
-        //  Spot.belongsToMany(Booking, {
-        //    foreignKey: "spotid"
-        //  });
-        //  Spot.belongsToMany(Spotimage, {
-        //    foreignKey: "spotid"
-        //  });
+         Spot.hasMany(models.Review, {
+         foreignKey: "spotId"
+         });
+         Spot.hasMany(models.Booking, {
+           foreignKey: "spotId"
+         });
+         Spot.hasMany(models.SpotImage, {
+           foreignKey: "spotId"
+         });
     }
   } //delete on cascade
 
