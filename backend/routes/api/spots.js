@@ -106,6 +106,14 @@ router.post('/', requireAuth, async (req, res, next) => {
       description,
       price
     });
+
+    if(!newSpot){
+     const spotError = new Error("A spot with those details already exists");
+     spotError.status = 401;
+     throw spotError;
+     
+    }
+   
     return res.status(201).json(newSpot);
   } catch (err) {
     next(err)
