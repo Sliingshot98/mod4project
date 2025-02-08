@@ -6,11 +6,6 @@ const { spotImage } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
-//MIDLE WARE
-const validateSpotImage = 
-
-
-
 
 //creating a spot image
 router.post("/:spotId/images", requireAuth, async (req, res) => {

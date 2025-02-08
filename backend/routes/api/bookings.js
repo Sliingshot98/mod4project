@@ -4,21 +4,13 @@ const { Booking, Spot, User } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require('sequelize');
-
 const router = express.Router();
 
 // Middleware to validate booking input
-
 const validateBooking = [
   check('startDate')
     .exists({ checkFalsy: true })
-    .withMessage('Start date is required')
-    .custom((value) => {
-      if (new Date(value) < new Date()) {
-        throw new Error('Start date cannot be in the past');
-      }
-      return true;
-    }),
+    .withMessage('Start date is required'),
   check('endDate')
     .exists({ checkFalsy: true })
     .withMessage('End date is required')
@@ -26,7 +18,7 @@ const validateBooking = [
       if (new Date(value) <= new Date(req.body.startDate)) {
         throw new Error('End date must be after start date');
       } 
-      
+    
       return true;
     }),
   handleValidationErrors,
@@ -109,8 +101,7 @@ router.get('/current', requireAuth, async (req, res) => {
 });
 
 // Create a new booking
-
-router.post('/:spotId', requireAuth, validateBooking, checkBookingConflicts, async (req, res) => {
+router.post('/:spotId', requireAuth, validateBooking, async (req, res) => {
   const { id } = req.user;
   const { spotId } = req.params;
   const { startDate, endDate } = req.body;
@@ -134,7 +125,17 @@ router.post('/:spotId', requireAuth, validateBooking, checkBookingConflicts, asy
 
 router.put('/:bookingId', requireAuth, validateBooking, checkPastBooking, checkBookingConflicts, async (req, res) => {
   const { startDate, endDate } = req.body;
-  const booking = req.booking;
+  const { id } = req.user;
+  const { bookingId } = req.params;
+
+  const booking = await Booking.findByPk(bookingId);
+  if (!booking) {
+    return res.status(404).json({ message: "The Booking couldn't be found" });
+  }
+
+  if (booking.userId !== id) {
+    return res.status(403).json({ message: 'Forbidden' });
+  }
 
   booking.startDate = startDate;
   booking.endDate = endDate;
@@ -144,9 +145,18 @@ router.put('/:bookingId', requireAuth, validateBooking, checkPastBooking, checkB
 });
 
 // Delete a booking
-
 router.delete('/:bookingId', requireAuth, checkStartedBooking, async (req, res) => {
-  const booking = req.booking;
+  const { id } = req.user;
+  const { bookingId } = req.params;
+
+  const booking = await Booking.findByPk(bookingId);
+  if (!booking) {
+    return res.status(404).json({ message: "Booking couldn't be found" });
+  }
+
+  if (booking.userId !== id) {
+    return res.status(403).json({ message: 'Forbidden' });
+  }
 
   await booking.destroy();
   res.json({ message: 'Successfully deleted' });
