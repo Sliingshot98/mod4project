@@ -3,14 +3,10 @@ const { requireAuth } = require('../../utils/auth');
 const { Booking, Spot, User } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-
+const { Op } = require('sequelize');
 const router = express.Router();
 
 // Middleware to validate booking input
-<<<<<<< HEAD
-
-=======
->>>>>>> staging
 const validateBooking = [
   check('startDate')
     .exists({ checkFalsy: true })
@@ -21,17 +17,80 @@ const validateBooking = [
     .custom((value, { req }) => {
       if (new Date(value) <= new Date(req.body.startDate)) {
         throw new Error('End date must be after start date');
-      }
+      } 
+    
       return true;
     }),
   handleValidationErrors,
 ];
 
-// Get all bookings for the current user
-<<<<<<< HEAD
+// Middleware to check for booking conflicts
 
-=======
->>>>>>> staging
+const checkBookingConflicts = async (req, res, next) => {
+  const { spotId } = req.params;
+  const { startDate, endDate } = req.body;
+
+  const conflictingBookings = await Booking.findAll({
+    where: {
+      spotId,
+      [Op.or]: [
+        { startDate: { [Op.between]: [startDate, endDate] } },
+        { endDate: { [Op.between]: [startDate, endDate] } },
+      ],
+    },
+  });
+
+  if (conflictingBookings.length > 0) {
+    return res.status(403).json({
+      message: "Sorry, this spot is already booked for the specified dates",
+      errors: {
+        startDate: "Start date conflicts with an existing booking",
+        endDate: "End date conflicts with an existing booking",
+      },
+    });
+  }
+
+  next();
+};
+
+// Middleware to check if booking is in the past
+
+const checkPastBooking = async (req, res, next) => {
+  const { bookingId } = req.params;
+
+  const booking = await Booking.findByPk(bookingId);
+  if (!booking) {
+    return res.status(404).json({ message: "Booking couldn't be found" });
+  }
+
+  if (new Date(booking.endDate) < new Date()) {
+    return res.status(403).json({ message: "Past bookings can't be modified" });
+  }
+
+  req.booking = booking;
+  next();
+};
+
+// Middleware to check if booking has started
+
+const checkStartedBooking = async (req, res, next) => {
+  const { bookingId } = req.params;
+
+  const booking = await Booking.findByPk(bookingId);
+  if (!booking) {
+    return res.status(404).json({ message: "Booking couldn't be found" });
+  }
+
+  if (new Date(booking.startDate) <= new Date()) {
+    return res.status(403).json({ message: "Bookings that have been started can't be deleted" });
+  }
+
+  req.booking = booking;
+  next();
+};
+
+// Get all bookings for the current user
+
 router.get('/current', requireAuth, async (req, res) => {
   const { id } = req.user;
   const bookings = await Booking.findAll({
@@ -42,10 +101,6 @@ router.get('/current', requireAuth, async (req, res) => {
 });
 
 // Create a new booking
-<<<<<<< HEAD
-
-=======
->>>>>>> staging
 router.post('/:spotId', requireAuth, validateBooking, async (req, res) => {
   const { id } = req.user;
   const { spotId } = req.params;
@@ -66,23 +121,16 @@ router.post('/:spotId', requireAuth, validateBooking, async (req, res) => {
   res.status(201).json(newBooking);
 });
 
-// Update a booking
-<<<<<<< HEAD
+// Edit a booking
 
-=======
->>>>>>> staging
-router.put('/:bookingId', requireAuth, validateBooking, async (req, res) => {
+router.put('/:bookingId', requireAuth, validateBooking, checkPastBooking, checkBookingConflicts, async (req, res) => {
+  const { startDate, endDate } = req.body;
   const { id } = req.user;
   const { bookingId } = req.params;
-  const { startDate, endDate } = req.body;
 
   const booking = await Booking.findByPk(bookingId);
   if (!booking) {
-<<<<<<< HEAD
     return res.status(404).json({ message: "The Booking couldn't be found" });
-=======
-    return res.status(404).json({ message: "Booking couldn't be found" });
->>>>>>> staging
   }
 
   if (booking.userId !== id) {
@@ -97,11 +145,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async (req, res) => {
 });
 
 // Delete a booking
-<<<<<<< HEAD
-
-=======
->>>>>>> staging
-router.delete('/:bookingId', requireAuth, async (req, res) => {
+router.delete('/:bookingId', requireAuth, checkStartedBooking, async (req, res) => {
   const { id } = req.user;
   const { bookingId } = req.params;
 

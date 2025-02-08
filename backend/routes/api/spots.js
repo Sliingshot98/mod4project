@@ -5,7 +5,16 @@ const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { Spot } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const { Op } = require("sequelize")
 const router = express.Router();
+
+//middle ware for create a spot
+
+
+//middle ware for edit a spot
+const bodyValidation = async ( req, res, next) => {
+  
+}
 
 
  //Add Query Filters to get all Spots + GET ALL SPOTS
@@ -24,6 +33,7 @@ const router = express.Router();
 
   const where = {};
   // Add filters based on query parameters
+  
   if (minLat) where.lat = { [Op.gte]: parseFloat(minLat) };
   if (maxLat) where.lat = { ...where.lat, [Op.lte]: parseFloat(maxLat) };
   if (minLng) where.lng = { [Op.gte]: parseFloat(minLng) };
@@ -31,24 +41,18 @@ const router = express.Router();
   if (minPrice) where.price = { [Op.gte]: parseFloat(minPrice) };
   if (maxPrice) where.price = { ...where.price, [Op.lte]: parseFloat(maxPrice) };
 
-  try {
+  try { 
     const spots = await Spot.findAll({
       where,
       limit: size,
       offset: (page - 1) * size,
     });
-console.log(spots);
-    // Get total count of spots for pagination
-    const totalSpots = await Spot.count({ where });
+    console.log(spots)
+    res.json({ 'Spots':spots})
 
-    return res.json({
-      Spots: spots,
-      page: parseInt(page),
-      size: parseInt(size),
-      totalSpots,
-    });
+
   } catch (err) {
-    console.error(err);
+    console.log(err);
     next(err); 
   }
 });
@@ -59,7 +63,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
     const spots = await Spot.findAll({
       where: { ownerId: user.id }
     });
-    return res.json({ Spots: spots });
+    res.json({ 'Spots': spots });
   } catch (err) {
     next(err)
   }
@@ -70,10 +74,9 @@ router.get('/:spotId', async (req, res, next) => {
   const { spotId } = req.params;
   try {
     const spot = await Spot.findByPk(spotId);
-    if (!spot) {
-      return res.status(400).json({ message: "Bad request." });
-    }
-    return res.json(spot);
+    if(!spot){
+      res.status(404).json({ 'message': "Spot couldn't be found" });
+     res.json({'Spot': spot})}
   } catch (err) {
    next(err);
   }
@@ -106,7 +109,7 @@ router.post('/', requireAuth, async (req, res, next) => {
       description,
       price
     });
-    return res.status(201).json(newSpot);
+    res.status(201).json(newSpot);
   } catch (err) {
     next(err)
   }
@@ -122,12 +125,12 @@ router.put('/:spotId', requireAuth, async (req, res,next) => {
     try {
       const spot = await Spot.findByPk(spotId);
       if (!spot) {
-        return res.status(404).json({ message: "Spot couldn't be found" });
+         res.status(404).json({ 'message': "Spot couldn't be found" });
       }
   
       // Check if the current user is the owner of the spot
       if (spot.ownerId !== user.id) {
-        return res.status(403).json({ message: 'Forbidden' });
+        res.status(403).json({ 'message': 'Forbidden' });
       }
   
       // Update the spot
@@ -142,7 +145,7 @@ router.put('/:spotId', requireAuth, async (req, res,next) => {
       spot.price = price || spot.price;
   
       await spot.save();
-      return res.json(spot);
+      res.json(spot);
     } catch (err) {
      next(err)}
   });
@@ -155,16 +158,16 @@ router.put('/:spotId', requireAuth, async (req, res,next) => {
     try {
       const spot = await Spot.findByPk(spotId);
       if (!spot) {
-        return res.status(404).json({ message: "Spot couldn't be found" });
+         res.status(404).json({ 'message': "Spot couldn't be found" });
       }
   
       // Check if the current user is the owner of the spot
       if (spot.ownerId !== user.id) {
-        return res.status(403).json({ message: 'Forbidden' });
+         res.status(403).json({ 'message': 'Forbidden' });
       }
   
       await spot.destroy();
-      return res.json({ message: 'Successfully deleted' });
+      res.json({ 'message': 'Successfully deleted' });
     } catch (err) {
       next(err)
     }
