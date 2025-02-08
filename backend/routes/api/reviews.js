@@ -11,11 +11,27 @@ const router = express.Router();
 //MIDDLEWARE
 const validateReview =
 
-
-
-
-
-
+//creating a review image
+router.post("/:reviewId/images", requireAuth, async (req, res, next) => {
+    const reviewId = parseInt(req.params.reviewId);
+    let { url } = req.body;
+    const theReview = await ReviewImage.findByPk(reviewId);
+    if(!theReview){
+        res.status(400);
+        return res.json({
+            message: "Review couldn't be found",
+            statuscode: 404,
+        });
+    }
+    const newReviewImage = await ReviewImage.create({
+        url,
+        reviewId,
+    });
+    let id = newReviewImage.id;
+    url = newReviewImage.url;
+    res.status(200);
+    return res.json({id, url});
+});
 
 //Get all reviews of the current user
 router.get('/current', requireAuth,

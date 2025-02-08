@@ -35,12 +35,13 @@ const validateBooking = [
 // Middleware to check for booking conflicts
 
 const checkBookingConflicts = async (req, res, next) => {
-  const { spotId } = req.params;
+  const { spotId } = req.booking;
   const { startDate, endDate } = req.body;
 
   const conflictingBookings = await Booking.findAll({
     where: {
       spotId,
+      
       [Op.or]: [
         { startDate: { [Op.between]: [startDate, endDate] } },
         { endDate: { [Op.between]: [startDate, endDate] } },
@@ -134,7 +135,17 @@ router.post('/:spotId', requireAuth, validateBooking, checkBookingConflicts, asy
 
 router.put('/:bookingId', requireAuth, validateBooking, checkPastBooking, checkBookingConflicts, async (req, res) => {
   const { startDate, endDate } = req.body;
-  const booking = req.booking;
+  const { id } = req.user;
+  const { bookingId } = req.params;
+
+  const booking = await Booking.findByPk(bookingId);
+  if (!booking) {
+    return res.status(404).json({ message: "The Booking couldn't be found" });
+  }
+
+  if (booking.userId !== id) {
+    return res.status(403).json({ message: 'Forbidden' });
+  }
 
   booking.startDate = startDate;
   booking.endDate = endDate;
