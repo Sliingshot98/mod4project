@@ -2,35 +2,38 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Review } = require ('../../db/models');
+const { Review, ReviewImage } = require ('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
 
 
-//MIDDLEWARE
-const validateReview =
-
+const validateReview = [
+    check("review")
+        .notEmpty()
+        .withMessage("Review text is required"),
+    check("stars")
+        .isInt({ min: 1, max: 5 })
+        .withMessage("Stars must be an integer from 1 to 5"),
+    handleValidationErrors,
+  ];
 //creating a review image
 router.post("/:reviewId/images", requireAuth, async (req, res, next) => {
     const reviewId = parseInt(req.params.reviewId);
     let { url } = req.body;
     const theReview = await ReviewImage.findByPk(reviewId);
     if(!theReview){
-        res.status(400);
+        res.status(404);
         return res.json({
             message: "Review couldn't be found",
-            statuscode: 404,
         });
     }
     const newReviewImage = await ReviewImage.create({
         url,
         reviewId,
     });
-    let id = newReviewImage.id;
-    url = newReviewImage.url;
-    res.status(200);
-    return res.json({id, url});
+    
+    return res.status(200).json({id: newReviewImage.id, url: newReviewImage.url});
 });
 
 //Get all reviews of the current user
@@ -38,78 +41,38 @@ router.get('/current', requireAuth,
 async (req, res) => {
     const { user } = req;
     try {
-        const review = await Review.findAll();
-        ({
-            where: { ownerId: user.id }
-        });
+        const reviews = await Review.findAll( {where: { userId: user.id }});
+        
          res.json({ Reviews: reviews });
     } catch (err) {
         res.status(400).json({ message: "Bad Request" });
     }
 });
 
-//Get all reviews by a spots id
-router.get('/:spotId/reviews', async(req, res) => {
-    const { spotId } = req.params;
-
- try {
-   const spot = await Spot.findByPk(spotId);
-   if(!spot){
-     res.status(404).json({message: "SPot not found"});
-   }
-   const reviews= await Review.findAll({where: {spotId: spotId}});
-   if(review.length === 0){
-     res.status(404).json({message: 'No reviews found for this spot'})
-   }
-    res.json({reviews});
-} catch (err){
-    return res.status(400).json({message: 'Bad Request'})
-}
-});
-
-
-//create a review for a spot based on the spots id 
-router.post('/', requireAuth, async (req, res) => {
-    const userId = req.user.id;
-    const spotId = req.spot.id
-    const {
-        review,
-        stars
-    } = req.body;
-    try {
-        const spot = await Spot.findByPk(spotId);
-        if(!spot){
-            return res.status(404).json({message: 'That spot does not exist'})
-        }
-        const newReview = await Review.create({
-            ownerId: userId,
-            spotId: spotId,
-            review,
-            stars
-        });
-        return res.status(201).json(newReview);
-    } catch (err) {
-        return res.status(400).json({message: 'Bad Request'})
-    }
-})
 
 //Edit a review
-router.put('/:reviewId', requireAuth, async (req, res, next) =>{
-const { user } = req;
-const { review, stars } = req.body;
-const reviewId = req.params;
+router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
+    const { user } = req;
+    const { review, stars } = req.body;
+    const { reviewId } = req.params;
+    try {
+        const existingReview = await Review.findByPk(reviewId);
+        if (!existingReview) {
+          return res.status(404).json({ message: "Review couldn't be found" });
+        } 
+        existingReview.review = review;
+    existingReview.stars = stars;
+    await existingReview.save();
 
-try{
-    const review = await Review.findByPk(reviewId);
-    if(!review) {
-        return res.status(404).json({message: 'That review does not exist'})
+    return res.json(existingReview);
     }
-} catch (err) {
+ 
+   catch (err) {
     return res.status(400).json({
         message:'Bad Request'
     });
 }
-})
+});
 
 //Delete a review
 router.delete('/:reviewId', requireAuth, async (req, res) => {

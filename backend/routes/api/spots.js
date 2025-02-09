@@ -2,12 +2,12 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot } = require('../../db/models');
+const { Spot, Review, SpotImage, Booking } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require("sequelize")
 const router = express.Router();
-const {SpotImage} = require('../../db/models')
+
 
  //Add Query Filters to get all Spots + GET ALL SPOTS
  router.get('/', async (req, res, next) => {
@@ -213,6 +213,61 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
     return res.json({newSpotImage})
   };
 });
+
+//Get all reviews by a spots id
+router.get('/:spotId/reviews', async(req, res) => {
+    const { spotId } = req.params;
+
+ try {
+   const spot = await Spot.findByPk(spotId);
+   if(!spot){
+     res.status(404).json({message: "Spot couldn't be found"});
+   }
+   const reviews= await Review.findAll({where: {spotId: spotId}});
+   if(review.length === 0){
+     res.status(404).json({message: 'No reviews found for this spot'})
+   }
+    res.json({reviews});
+} catch (err){
+    return res.status(400).json({message: 'Bad Request'})
+}
+});
+// Get all Bookings for a spot based on the Spot's Id
+router.get('/:spotId/bookings', requireAuth, async (req,res, next) => {
+  const spotId = parseInt(req.params.spotId);
+  try {
+    const spot = await Spot.findByPk(spotId);
+    if(!spot){
+      res.status(404).json({message: "Spot couldn't be found"})
+    }
+    if()
+  }
+});
+//create a review for a spot based on the spots id 
+router.post('/:spotId/reviews', requireAuth, async (req, res) => {
+    const userId = req.user.id;
+    const spotId = parseInt(req.params.spotId);
+    const {
+        review,
+        stars
+    } = req.body;
+    try {
+        const spot = await Spot.findByPk(spotId);
+        if(!spot){
+            return res.status(404).json({message: 'That spot does not exist'})
+        }
+        const newReview = await Review.create({
+            userId,
+            spotId,
+            review,
+            stars
+        });
+        return res.status(201).json(newReview);
+    } catch (err) {
+        return res.status(400).json({message: 'Bad Request'})
+    }
+});
+
 module.exports = router;
 
 
