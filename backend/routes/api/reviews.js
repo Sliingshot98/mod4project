@@ -1,17 +1,16 @@
 const express = require("express");
 
 const { requireAuth } = require("../../utils/auth");
-const { Review } = require("../../db/models");
-const { Spot } = require("../../db/models");
-const { User } = require("../../db/models");
-const { ReviewImage } = require("../../db/models");
+const { Spot, User,ReviewImage,Review } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
+
 const router = express.Router();
 
 //MIDDLEWARE
 const validateReview = [
   check("review").notEmpty().withMessage("Review text is required"),
+
 
   check("stars")
     .isInt({ min: 1, max: 5 })
@@ -29,14 +28,55 @@ router.get("/current", requireAuth, async (req, res) => {
 
     if(!reviews.length){
         return res.status(404).json({ message: "Spot couldn't be found" });
+
+
+
+
+
+
+
+
+//Get all reviews of the current user
+router.get('/current', requireAuth,
+async (req, res) => {
+    const { user } = req;
+    try {
+        const review = await Review.findAll();
+        ({
+            where: { ownerId: user.id }
+        });
+         res.json({ Reviews: reviews });
+    } catch (err) {
+        res.status(400).json({ message: "Bad Request" });
+
     }
     return res.json({ Reviews: reviews });
   } catch (err) {
+
 
     return res.status(400).json({
         message: "Bad Request",
     })
   }
+
+//Get all reviews by a spots id
+router.get('/:spotId/reviews', async(req, res) => {
+    const { spotId } = req.params;
+
+ try {
+   const spot = await Spot.findByPk(spotId);
+   if(!spot){
+     res.status(404).json({message: "SPot not found"});
+   }
+   const reviews= await Review.findAll({where: {spotId: spotId}});
+   if(review.length === 0){
+     res.status(404).json({message: 'No reviews found for this spot'})
+   }
+    res.json({reviews});
+} catch (err){
+    return res.status(400).json({message: 'Bad Request'})
+}
+
 });
 
 //adding a review image
@@ -124,3 +164,4 @@ router.delete("/:reviewId", requireAuth, async (req, res) => {
 });
 
 module.exports = router;
+

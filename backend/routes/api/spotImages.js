@@ -11,7 +11,7 @@ const router = express.Router();
 router.post("/:spotId/images", requireAuth, async (req, res) => {
     let { id } = req.user;
     const { spotId } = req.params;
-    const { preview } = req.body;
+    const { url, preview } = req.body;
     const theSpot = await Spot.findByPk(spotId);
     if(!theSpot) {
         return res.json({
@@ -46,3 +46,5 @@ router.delete("/:imageId", requireAuth, async (req, res, next) => {
         statusCode: 200,
     });
 });
+
+module.exports = router;
