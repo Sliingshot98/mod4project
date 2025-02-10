@@ -2,14 +2,17 @@ const express = require('express');
 require('express-async-errors');
 const morgan = require('morgan');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const csurf = require('csurf');
 const helmet = require('helmet');
-const cookieParser = require('cookie-parser');
 const { ValidationError } = require('sequelize');
 
-const { environment } = require('./config');
+const routes = require('./routes');
+
+const { environment, port } = require('./config');
 const isProduction = environment === 'production'
 const app = express();
+
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
@@ -19,17 +22,18 @@ if (!isProduction) {
     // enable cors only in development
     app.use(cors());
   }
-  
+
   // helmet helps set a variety of headers to better secure your app
   app.use(
     helmet.crossOriginResourcePolicy({
       policy: "cross-origin"
     })
   );
-  
-  // Set the _csrf token and create req.csrfToken method
+
+
+  // Set the _csurf token and create req.csrfToken method
   app.use(
-    csurf({
+   csurf({
       cookie: {
         secure: isProduction,
         sameSite: isProduction && "Lax",
@@ -38,14 +42,7 @@ if (!isProduction) {
     })
   );
 
-const routes = require('./routes');
-
-
-//middleware to be used here
-
-
-
-app.use(routes); 
+app.use(routes);
 
 
 // Catch unhandled requests and forward to error handler.
@@ -73,17 +70,12 @@ app.use((err, _req, _res, next) => {
 
 // Error formatter
 app.use((err, _req, res, _next) => {
-  res.status(err.status || 500);
+  const { statusCode, message, errors } = err
   console.error(err);
-  res.json({
-    title: err.title || 'Server Error',
-    message: err.message,
-    errors: err.errors,
+  res.status(statusCode || 500).json({   
+    message ,
+    errors,
     stack: isProduction ? null : err.stack
   });
 });
-
-
-
-
 module.exports = app;
