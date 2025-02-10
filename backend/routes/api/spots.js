@@ -1,6 +1,6 @@
 const express = require('express');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, Review, SpotImage, Booking, User, ReviewImage } = require('../../db/models');
+const { Spot, Review, SpotImage, Booking, User, ReviewImage, sequelize } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require("sequelize")
@@ -62,8 +62,6 @@ const checkBookingConflicts = async (req, res, next) => {
 
  //Add Query Filters to get all Spots + GET ALL SPOTS
  router.get('/', async (req, res, next) => {
-  console.log(req.path)
-
   const { 
     minLat,
     maxLat,
