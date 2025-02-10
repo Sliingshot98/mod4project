@@ -6,54 +6,28 @@ const { ReviewImage } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
-//MIDLEWARE
-const validateReviewImage = 
+const { Review } = require('../../db/models')
 
-
-
-
-
-//creating a review image
-router.post("/:reviewId/images", requireAuth, async (req, res, next) => {
-    const reviewId = parseInt(req.params.reviewId);
-    let { url } = req.body;
-    const theReview = await ReviewImage.findByPk(reviewId);
-    if(!theReview){
-        res.status(400);
-        return res.json({
-            message: "Review couldn't be found",
-            statuscode: 404,
-        });
-    }
-    const newReviewImage = await ReviewImage.create({
-        url,
-        reviewId,
-    });
-    let id = newReviewImage.id;
-    url = newReviewImage.url;
-    res.status(200);
-    return res.json({id, url});
-});
 
 //deleting a review image
-router.delete("/:imageId", requireAuth, async (req, res, next) => {
+router.delete('/:imageId', requireAuth, async (req, res, next) => {
+    try {
     const imageId = parseInt(req.params.imageId);
-    const theImage = await reviewId.findByPk(imageId, {
+    const theImage = await ReviewImage.findByPk(imageId, {
         include: {model: Review},
     });
     if(!theImage) {
-        req.status(404);
-        return res.json({
-            message: "review Image couldn't be found",
-            statuscode: 404,
+        return res.status(404).json({
+            message: "Review Image couldn't be found",
         });
     }
-    await theImage.delete();
-    res.status(200);
+    await theImage.destroy();
     return res.json({
-        message: "Successfully Deleted",
-        statuscode: 200,
+        message: "Successfully deleted",
     });
+} catch(err){
+    next(err)
+}
 });
 
 module.exports = router;

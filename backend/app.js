@@ -42,13 +42,6 @@ if (!isProduction) {
     })
   );
 
-
-
-
-//middleware to be used here
-
-
-
 app.use(routes);
 
 
@@ -77,20 +70,12 @@ app.use((err, _req, _res, next) => {
 
 // Error formatter
 app.use((err, _req, res, _next) => {
-  res.status(err.status || 500);
+  const { statusCode, message, errors } = err
   console.error(err);
-  res.json({
-    title: err.title || 'Server Error',
-    message: err.message,
-    errors: err.errors,
+  res.status(statusCode || 500).json({   
+    message ,
+    errors,
     stack: isProduction ? null : err.stack
   });
 });
-
-
-
-// app.listen(port, () => console.log("Server is listening to you sir or madame, on port", port) );
-
-
-
 module.exports = app;

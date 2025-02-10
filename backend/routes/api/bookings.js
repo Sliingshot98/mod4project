@@ -27,12 +27,13 @@ const validateBooking = [
 // Middleware to check for booking conflicts
 
 const checkBookingConflicts = async (req, res, next) => {
-  const { spotId } = req.params;
+  const { spotId } = req.booking;
   const { startDate, endDate } = req.body;
 
   const conflictingBookings = await Booking.findAll({
     where: {
       spotId,
+      
       [Op.or]: [
         { startDate: { [Op.between]: [startDate, endDate] } },
         { endDate: { [Op.between]: [startDate, endDate] } },
@@ -100,8 +101,9 @@ router.get('/current', requireAuth, async (req, res) => {
   res.json({ Bookings: bookings });
 });
 
-// Create a new booking
-router.post('/:spotId', requireAuth, validateBooking, async (req, res) => {
+// Create a new booking at a spot based on the spotId
+
+router.post('//:spotId/bookings', requireAuth, validateBooking, checkBookingConflicts, async (req, res) => {
   const { id } = req.user;
   const { spotId } = req.params;
   const { startDate, endDate } = req.body;
