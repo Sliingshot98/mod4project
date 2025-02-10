@@ -38,16 +38,7 @@ router.post("/:reviewId/images", requireAuth, async (req, res, next) => {
     
     return res.status(200).json({id: newReviewImage.id, url: newReviewImage.url});
 });
-//MIDDLEWARE
-const validateReview = [
-  check("review").notEmpty().withMessage("Review text is required"),
 
-
-  check("stars")
-    .isInt({ min: 1, max: 5 })
-    .withMessage("Stars must be an integer from 1 to 5"),
-  handleValidationErrors,
-];
 
 
 
