@@ -11,11 +11,10 @@ router.use('/api', apiRouter);
 router.get("/api/csrf/restore", (req, res) => {
     const csrfToken = req.csrfToken();
 
-    res.cookie("XSRF-TOKEN", csrfToken)
 
     res.cookie("XSRF-TOKEN", csrfToken, {
       httpOnly: false,
-      secure: process.env.node_env === "production",
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict"
     });
 

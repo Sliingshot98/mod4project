@@ -109,9 +109,9 @@ router.get('/current', requireAuth, async (req, res) => {
   res.json({ Bookings: bookings });
 });
 
-// Create a new booking
+// Create a new booking at a spot based on the spotId
 
-router.post('/:spotId', requireAuth, validateBooking, checkBookingConflicts, async (req, res) => {
+router.post('//:spotId/bookings', requireAuth, validateBooking, checkBookingConflicts, async (req, res) => {
   const { id } = req.user;
   const { spotId } = req.params;
   const { startDate, endDate } = req.body;
@@ -143,8 +143,8 @@ router.put('/:bookingId', requireAuth, validateBooking, checkPastBooking, checkB
     return res.status(404).json({ message: "The Booking couldn't be found" });
   }
 
-  if (booking.userId !== id) {
-    return res.status(403).json({ message: 'Forbidden' });
+  if (booking.userId !== User.id) {
+    return res.status(403).json({ message: "Past bookings can't be modified"})
   }
 
   booking.startDate = startDate;

@@ -1,7 +1,7 @@
 'use strict';
 
 const { Model, Validator } = require('sequelize');
-const { Spot } = require('./spot');
+
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -19,8 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
 
-  User.init(
-    {
+  User.init({
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,

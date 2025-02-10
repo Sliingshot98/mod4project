@@ -40,7 +40,7 @@ router.post(
   
       if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
        
-        return next({"message":"Invalid credentials","status":401});
+        return next({"message":"Invalid credentials","statusCode":401});
       }
   
       const safeUser = {
