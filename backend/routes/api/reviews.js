@@ -18,26 +18,10 @@ const validateReview = [
   handleValidationErrors,
 ];
 
-//Get all reviews of the current user
-router.get("/current", requireAuth, async (req, res) => {
-  const { user } = req;
-  try {
-    const reviews = await Review.findAll({
-      where: { userId: user.id },
-    })
-
-    if(!reviews.length){
-        return res.status(404).json({ message: "Spot couldn't be found" });
-
-
-
-
-
-
 
 
 //Get all reviews of the current user
-router.get('/current', requireAuth,
+router.get('/current', requireAuth,)
 async (req, res) => {
     const { user } = req;
     try {
@@ -51,13 +35,8 @@ async (req, res) => {
 
     }
     return res.json({ Reviews: reviews });
-  } catch (err) {
+  } 
 
-
-    return res.status(400).json({
-        message: "Bad Request",
-    })
-  }
 
 //Get all reviews by a spots id
 router.get('/:spotId/reviews', async(req, res) => {
@@ -164,4 +143,3 @@ router.delete("/:reviewId", requireAuth, async (req, res) => {
 });
 
 module.exports = router;
-
