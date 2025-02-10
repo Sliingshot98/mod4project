@@ -143,8 +143,8 @@ router.put('/:bookingId', requireAuth, validateBooking, checkPastBooking, checkB
     return res.status(404).json({ message: "The Booking couldn't be found" });
   }
 
-  if (booking.userId !== id) {
-    return res.status(403).json({ message: 'Forbidden' });
+  if (booking.userId !== User.id) {
+    return res.status(403).json({ message: "Past bookings can't be modified"})
   }
 
   booking.startDate = startDate;
